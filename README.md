@@ -1,3 +1,28 @@
-# codex
+# 临期助手 / AI Pantry
 
-Projects developed with Codex.
+单人微信临期助手MVP，业务核心独立于聊天渠道，后续可接家庭群或飞书。
+
+- [MVP制作指南](docs/MVP制作指南.md)：范围、规则、分阶段实现与验收。
+- [渠道接入接口](docs/接入接口.md)：JSON命令、身份映射与提醒投递契约。
+- [云端使用说明](docs/云端使用说明.md)：微信里如何使用、部署位置与维护。
+
+## 当前状态
+
+文字版已部署并完成OpenClaw联调，20项程序测试通过。定时任务已启用；真实微信提醒待用户人工验收，照片识别尚未完成。详细状态与人工测试清单见MVP制作指南。
+
+## 已可运行
+
+Python 3.9+，无需第三方依赖。支持库存、独立草稿、数量变更、撤销、幂等、提醒队列与周汇总。
+
+```sh
+python3 -m unittest discover -s tests -v
+python3 -m pantry.demo
+```
+
+本地通用CLI的数据默认存放在 `.local/pantry.sqlite3`；云端微信桥接使用 `~/.local/share/ai-pantry/inventory.sqlite3`。两者均不进入Git。演示使用内存数据库，不修改真实库存、不发送消息。
+
+## OpenClaw 接入
+
+已部署到现有云端OpenClaw：工作区ai-pantry技能负责文字交互，独立systemd任务负责提醒扫描与每日备份。复用现有微信渠道，不另建机器人。测试库与正式库存隔离。
+
+照片识别尚未完成；现有模型配置为纯文本。本轮验证OpenClaw实际工具调用与库存结果，未向微信重复发送测试消息。
